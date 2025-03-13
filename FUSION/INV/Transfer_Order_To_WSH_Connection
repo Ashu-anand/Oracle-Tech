@@ -1,0 +1,20 @@
+SELECT ipsn.pick_slip_number,
+       wdd.source_header_number transfer_order_number,
+       dsh.supply_order_number,
+       dsh.supply_order_reference_number,
+       wda.*
+FROM   inv_pick_slip_numbers ipsn,
+       dos_supply_headers dsh,
+       inv_transfer_order_headers itoh,
+       inv_transfer_order_lines itol,
+       wsh_new_deliveries wnd,
+       wsh_delivery_assignments wda,
+       wsh_delivery_details wdd
+WHERE  1 = 1
+       AND wnd.delivery_name = '19003'
+       AND wda.delivery_id = wnd.delivery_id
+       AND wdd.delivery_detail_id = wda.delivery_detail_id
+       AND ipsn.pick_slip_batch_id = wdd.batch_id
+       AND wdd.source_header_number = itoh.header_number
+       AND itoh.header_id = itol.header_id
+       AND itol.source_header_id = dsh.header_id; 
