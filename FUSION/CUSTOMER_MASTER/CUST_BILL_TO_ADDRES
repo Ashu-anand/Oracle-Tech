@@ -1,0 +1,26 @@
+SELECT DOA.header_id,
+       HCA.account_number,
+       HP.party_name,
+       hzl.address1,
+       hzl.address2,
+       hzl.address3,
+       hzl.address4,
+       hzl.city,
+       hzl.postal_code,
+       hzl.state,
+       hzl.country
+FROM   doo_order_addresses DOA,
+       hz_cust_accounts HCA,
+       hz_cust_site_uses_all HZCSUA,
+       hz_parties HP,
+       hz_cust_acct_sites_all hzcasa,
+       hz_party_sites hzps,
+       hz_locations HZL
+WHERE  1 = 1
+       AND DOA.address_use_type = 'BILL_TO'
+       AND HCA.cust_account_id = DOA.cust_acct_id
+       AND HCA.party_id = HP.party_id
+       AND DOA.cust_acct_site_use_id = HZCSUA.site_use_id
+       AND hzcsua.cust_acct_site_id = hzcasa.cust_acct_site_id
+       AND hzcasa.party_site_id = hzps.party_site_id
+       AND hzps.location_id = hzl.location_id 
